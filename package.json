@@ -1,0 +1,18 @@
+{
+  "name": "eating-aloud-blog",
+  "version": "1.0.0",
+  "description": "Responsive food blog inspired by Eating Aloud design, built with modern HTML, Sass, and TypeScript.",
+  "private": true,
+  "scripts": {
+    "build:css": "sass styles/main.scss styles/main.css --no-source-map --style=expanded",
+    "build:ts": "tsc",
+    "build": "npm run build:css && npm run build:ts",
+    "watch:css": "sass --watch styles/main.scss:styles/main.css",
+    "watch:ts": "tsc --watch",
+    "start": "npm run build && echo Serve index.html with your favorite static server"
+  },
+  "devDependencies": {
+    "sass": "^1.80.0",
+    "typescript": "^5.4.0"
+  }
+}

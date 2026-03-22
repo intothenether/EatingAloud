@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   sodipodi:docname="EatingAloudLogoDark.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="px"
+     inkscape:zoom="9.1796875"
+     inkscape:cx="-1.307234"
+     inkscape:cy="-3.213617"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <ellipse
+       style="fill:#000000;fill-opacity:0.764706;stroke-width:3.58456"
+       id="path3"
+       cx="15.822908"
+       cy="23.328596"
+       rx="14.462399"
+       ry="3.0956187"
+       inkscape:label="shadow" />
+    <path
+       style="fill:#7a3f49;fill-opacity:0.835294;stroke-width:2.44481"
+       d="m 10.821631,7.5349921 c 0,0 5.779703,-0.7041356 7.196298,7.2760419 1.416593,7.980177 -2.663197,8.058414 -7.309625,8.214889 C 6.0618727,23.182402 2.322064,21.382944 3.6819949,15.67164 5.0419252,9.9603366 5.9485459,8.3173586 10.821631,7.5349921 Z"
+       id="path2-8"
+       inkscape:label="mochi2"
+       sodipodi:nodetypes="cscsc" />
+    <path
+       style="fill:#497a3f;fill-opacity:0.836364;stroke-width:2.7868"
+       d="m 19.366794,7.1883194 c 0,0 6.751325,-0.7832344 8.406062,8.0933896 1.654736,8.876622 -3.110905,8.963648 -8.53844,9.1377 C 13.806878,24.593466 9.4383728,22.591868 11.026921,16.23899 12.615468,9.8861129 13.6745,8.0585727 19.366794,7.1883194 Z"
+       id="path2"
+       inkscape:label="mochi" />
+    <path
+       style="fill:#ffffff;fill-opacity:0.836364;stroke-width:1.84105"
+       d="m 13.38834,13.41332 c 0,0 4.470127,-0.516278 5.565747,5.334844 1.095619,5.85112 -2.059765,5.908485 -5.653396,6.023212 -3.5936332,0.114732 -6.4860684,-1.204643 -5.4342732,-5.39221 1.051795,-4.187567 1.752991,-5.392209 5.5219222,-5.965846 z"
+       id="path2-1"
+       inkscape:label="mochi3" />
+  </g>
+</svg>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eating Aloud</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <img src="resources/images/EatingAloudLogoDark.svg" alt="Eating Aloud logo" class="brand-logo" />
+      </div>
+      <nav class="desktop-menu">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#posts">Stories</a></li>
+          <li><a href="#">About us</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="menu-toggle" class="menu-toggle" aria-label="Toggle Navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="mobile-nav" class="mobile-nav hidden" aria-label="Mobile Navigation">
+        <a href="#">Home</a>
+        <a href="#posts">Stories</a>
+        <a href="#">About us</a>
+        <a href="#">Contact</a>
+      </nav>
+    </header>
+
+    <main class="hero">
+      <section class="hero-content">
+        <h1>Eating Aloud</h1>
+        <p class="subtitle">Home-cooked favorites and honest restaurant reviews.</p>
+
+        <div class="card-grid">
+          <article class="card" data-post-id="hero1">
+            <img class="card-image" src="resources/images/oysters.jpg" alt="Dinner at Farang, Stockholm" />
+            <p class="caption">Dinner at Farang, Stockholm</p>
+          </article>
+
+          <article class="card" data-post-id="hero2">
+            <img class="card-image" src="resources/images/cheesecake.jpg" alt="Basque cheesecake" />
+            <p class="caption">Basque cheesecake at Ruby Grill</p>
+          </article>
+
+          <article class="card" data-post-id="hero3">
+            <img class="card-image" src="resources/images/larb.jpg" alt="Larb" />
+            <p class="caption">Larb at home</p>
+          </article>
+        </div>
+
+        <div class="cta-wrap">
+          <a href="#more-stories" class="cta-button">See more stories</a>
+        </div>
+
+      </section>
+
+      <a href="#more-stories" class="scroll-down" aria-label="Scroll to stories">
+        <span class="arrow">↓</span>
+      </a>
+    </main>
+
+    <section id="more-stories" class="more-stories">
+      <div class="stories-content">
+        <h2>More Stories</h2>
+        <p>Discover our collection of recipes and dining experiences</p>
+        
+        <div class="card-grid">
+          <article class="card" data-post-id="story1">
+            <img class="card-image" src="resources/images/poke.jpg" alt="Poke bowl" />
+            <p class="caption">Poké – Hawaii meets Japan</p>
+          </article>
+
+          <article class="card" data-post-id="story2">
+            <img class="card-image" src="resources/images/khaosoi.jpg" alt="Khao soi" />
+            <p class="caption">Khao Soi – World's best soup?</p>
+          </article>
+
+          <article class="card" data-post-id="story3">
+            <img class="card-image" src="resources/images/koreanbbq.JPG" alt="Korean BBQ" />
+            <p class="caption">Korean BBQ in Stockholm</p>
+          </article>
+
+          <article class="card" data-post-id="story4">
+            <img class="card-image" src="resources/images/restaurant.jpg" alt="Restaurant review" />
+            <p class="caption">Hidden gem restaurants</p>
+          </article>
+
+          <article class="card" data-post-id="story5">
+            <img class="card-image" src="resources/images/dfoctopus.jpg" alt="Deep fried octopus" />
+            <p class="caption">Deep fried octopus for dinner</p>
+          </article>
+
+          <article class="card" data-post-id="story6">
+            <img class="card-image" src="resources/images/cocktail.jpg" alt="cocktail" />
+            <p class="caption">How to find amazing cocktails</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <footer id="footer" class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Eating Aloud</h3>
+          <p>Home-cooked favorites and honest restaurant reviews.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#more-stories">Stories</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Follow Us</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Instagram" class="social-link">Instagram</a>
+            <a href="#" aria-label="Twitter" class="social-link">Twitter</a>
+            <a href="#" aria-label="Facebook" class="social-link">Facebook</a>
+            <a href="#" aria-label="Pinterest" class="social-link">Pinterest</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 Eating Aloud. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script type="module" src="scripts/dist/main.js"></script>
+  </body>
+</html>
