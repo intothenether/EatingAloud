@@ -1,15 +1,93 @@
 "use strict";
-const PASSWORD = 'admin123'; // Change this to a secure password
-function checkAuth() {
-    const auth = localStorage.getItem('adminAuth');
-    if (auth === 'true')
-        return true;
-    const password = prompt('Enter admin password:');
-    if (password === PASSWORD) {
-        localStorage.setItem('adminAuth', 'true');
-        return true;
+const SESSION_DURATION_MS = 2 * 60 * 60 * 1000; // 2 hours
+const adminForm = document.getElementById('auth-form');
+const loginForm = document.getElementById('login-form');
+const cmsContent = document.getElementById('cms-content');
+function toHex(buffer) {
+    return Array.from(new Uint8Array(buffer))
+        .map(byte => byte.toString(16).padStart(2, '0'))
+        .join('');
+}
+function fromHex(hex) {
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < bytes.length; i++) {
+        bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
     }
-    return false;
+    return bytes;
+}
+function generateSalt() {
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    return toHex(salt.buffer);
+}
+async function hashPassword(password, saltHex) {
+    const saltBytes = fromHex(saltHex);
+    const passwordKey = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
+    const derivedBits = await crypto.subtle.deriveBits({
+        name: 'PBKDF2',
+        salt: saltBytes,
+        iterations: 150000,
+        hash: 'SHA-256'
+    }, passwordKey, 256);
+    return toHex(derivedBits);
+}
+function getStoredCredentials() {
+    const hash = localStorage.getItem('adminPasswordHash');
+    const salt = localStorage.getItem('adminPasswordSalt');
+    return { hash, salt };
+}
+function setStoredCredentials(hash, salt) {
+    localStorage.setItem('adminPasswordHash', hash);
+    localStorage.setItem('adminPasswordSalt', salt);
+}
+function setSessionToken() {
+    const token = crypto.getRandomValues(new Uint8Array(32)).reduce((str, b) => str + b.toString(16).padStart(2, '0'), '');
+    const expires = Date.now() + SESSION_DURATION_MS;
+    sessionStorage.setItem('adminSessionToken', token);
+    sessionStorage.setItem('adminSessionExpires', String(expires));
+}
+function clearSessionToken() {
+    sessionStorage.removeItem('adminSessionToken');
+    sessionStorage.removeItem('adminSessionExpires');
+}
+function isSessionValid() {
+    const token = sessionStorage.getItem('adminSessionToken');
+    const expires = Number(sessionStorage.getItem('adminSessionExpires'));
+    return !!token && !Number.isNaN(expires) && expires > Date.now();
+}
+function showCMS() {
+    if (loginForm)
+        loginForm.classList.add('hidden');
+    if (cmsContent)
+        cmsContent.classList.remove('hidden');
+    loadAdminPosts();
+}
+function requireLogin() {
+    if (isSessionValid()) {
+        showCMS();
+        return;
+    }
+    if (loginForm)
+        loginForm.classList.remove('hidden');
+    if (cmsContent)
+        cmsContent.classList.add('hidden');
+}
+function handleLogout() {
+    clearSessionToken();
+    window.location.reload();
+}
+// Expose deletePost as global
+window.deletePost = deletePost;
+async function checkMasterPassword(password) {
+    const { hash, salt } = getStoredCredentials();
+    if (!hash || !salt)
+        return false;
+    const testHash = await hashPassword(password, salt);
+    return testHash === hash;
+}
+async function setupPassword(password) {
+    const salt = generateSalt();
+    const hash = await hashPassword(password, salt);
+    setStoredCredentials(hash, salt);
 }
 function loadAdminPosts() {
     const posts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
@@ -40,33 +118,57 @@ function deletePost(id) {
     localStorage.setItem('blogPosts', JSON.stringify(filtered));
     loadAdminPosts();
 }
-function initCMS() {
-    if (!checkAuth()) {
-        alert('Access denied');
-        window.location.href = 'index.html';
-        return;
-    }
-    document.getElementById('login-form').classList.add('hidden');
-    document.getElementById('cms-content').classList.remove('hidden');
-    const form = document.getElementById('new-post-form');
-    form.addEventListener('submit', (e) => {
+if (adminForm) {
+    adminForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const title = document.getElementById('post-title').value;
-        const image = document.getElementById('post-image').value;
-        const content = document.getElementById('post-content').value;
-        const post = {
-            id: Date.now().toString(),
-            title,
-            image: image || undefined,
-            content
-        };
+        const passwordInput = document.getElementById('password');
+        if (!passwordInput)
+            return;
+        const password = passwordInput.value.trim();
+        if (!password) {
+            alert('Password cannot be empty');
+            return;
+        }
+        const { hash } = getStoredCredentials();
+        if (!hash) {
+            // initial setup
+            await setupPassword(password);
+            alert('Admin password set. Please log in again.');
+            passwordInput.value = '';
+            return;
+        }
+        if (await checkMasterPassword(password)) {
+            setSessionToken();
+            showCMS();
+        }
+        else {
+            alert('Invalid password');
+            passwordInput.value = '';
+        }
+    });
+}
+const logoutButton = document.createElement('button');
+logoutButton.textContent = 'Logout';
+logoutButton.style.margin = '10px 0 20px';
+logoutButton.addEventListener('click', handleLogout);
+if (cmsContent)
+    cmsContent.prepend(logoutButton);
+const newPostForm = document.getElementById('new-post-form');
+if (newPostForm) {
+    newPostForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = document.getElementById('post-title').value.trim();
+        const image = document.getElementById('post-image').value.trim();
+        const content = document.getElementById('post-content').value.trim();
+        if (!title || !content) {
+            alert('Please provide title and content.');
+            return;
+        }
+        const post = { id: Date.now().toString(), title, image: image || undefined, content };
         savePost(post);
         loadAdminPosts();
-        form.reset();
+        newPostForm.reset();
     });
-    loadAdminPosts();
 }
-// Make deletePost global
-window.deletePost = deletePost;
-initCMS();
+requireLogin();
 //# sourceMappingURL=admin.js.map

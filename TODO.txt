@@ -1,17 +1,18 @@
-1. Fix the style on the links and lists on the footer. Also, move the "scroll down"-arrow below the cards instead of having it to the right
+--1. Fix the style on the links and lists on the footer. Also, move the "scroll down"-arrow below the cards instead of having it to the right
 
-2. Add a slightly different card-style for restaurant reviews, with stars indicating the experience. 
+--2. Add a slightly different card-style for restaurant reviews, with stars indicating the experience. 
 
-3. Update the recipe styling, the numbers should be in circles to be more clear. The list shoul not have dots at the start of each item. 
+--3. Update the recipe styling, the numbers should be in circles to be more clear. The list shoul not have dots at the start of each item. 
 
-4. Add the About us page.
+--4. Add the About us page.
 
-5. Restaurant review stories should have an integrated map, showing the restaurant's location.
+--5. Restaurant review stories should have an integrated map, showing the restaurant's location.
 
-6. Improve the CMS. Make it extra safe. Don't store the password in file. Use session tokens.
+--6. Improve the CMS. Make it extra safe. Don't store the password in file. Use proper encryption and session tokens. // password: asdf1234
 
-7.
+--7. Improve the fonts and text placement, especially on the topic cards. The text does look unaligned and out of place in the current layout.
 
+--8. Add the site's name next to the logo in the header in a nice looking manner.
 
 
 X. Make account's at different social media platforms.

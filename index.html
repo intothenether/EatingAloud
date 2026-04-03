@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eating Aloud</title>
+    <title>Living to eat</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,41 +15,47 @@
   <body>
     <header class="site-header">
       <div class="brand">
-        <img src="resources/images/EatingAloudLogoDark.svg" alt="Eating Aloud logo" class="brand-logo" />
+        <img src="resources/images/EatingAloudLogoDark.svg" alt="Living to eat logo" class="brand-logo" />
+        <div class="brand-title">
+          <span>Living</span>
+          <strong>to eat</strong>
+        </div>
       </div>
       <nav class="desktop-menu">
         <ul>
-          <li><a href="#">Home</a></li>
+          <li><a href="index.html">Home</a></li>
           <li><a href="#posts">Stories</a></li>
-          <li><a href="#">About us</a></li>
+          <li><a href="about.html">About us</a></li>
           <li><a href="#">Contact</a></li>
         </ul>
       </nav>
       <button id="menu-toggle" class="menu-toggle" aria-label="Toggle Navigation">
         <span></span><span></span><span></span>
       </button>
-      <nav id="mobile-nav" class="mobile-nav hidden" aria-label="Mobile Navigation">
-        <a href="#">Home</a>
+      <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile Navigation">
+        <a href="index.html">Home</a>
         <a href="#posts">Stories</a>
-        <a href="#">About us</a>
+        <a href="about.html">About us</a>
         <a href="#">Contact</a>
       </nav>
     </header>
 
     <main class="hero">
       <section class="hero-content">
-        <h1>Eating Aloud</h1>
+        <h1>Living to eat</h1>
         <p class="subtitle">Home-cooked favorites and honest restaurant reviews.</p>
 
         <div class="card-grid">
-          <article class="card" data-post-id="hero1">
+          <article class="card review-card" data-post-id="hero1">
             <img class="card-image" src="resources/images/oysters.jpg" alt="Dinner at Farang, Stockholm" />
             <p class="caption">Dinner at Farang, Stockholm</p>
+            <div class="rating" aria-label="4 out of 5 stars">★★★★☆</div>
           </article>
 
-          <article class="card" data-post-id="hero2">
+          <article class="card review-card" data-post-id="hero2">
             <img class="card-image" src="resources/images/cheesecake.jpg" alt="Basque cheesecake" />
             <p class="caption">Basque cheesecake at Ruby Grill</p>
+            <div class="rating" aria-label="3 out of 5 stars">★★★☆☆</div>
           </article>
 
           <article class="card" data-post-id="hero3">
@@ -111,7 +117,7 @@
     <footer id="footer" class="footer">
       <div class="footer-content">
         <div class="footer-section">
-          <h3>Eating Aloud</h3>
+          <h3>Living to eat</h3>
           <p>Home-cooked favorites and honest restaurant reviews.</p>
         </div>
         
