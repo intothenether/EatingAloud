@@ -567,12 +567,112 @@ img.card-image {
   margin-bottom: 40px;
 }
 
+#new-post-form label,
+#new-post-form legend {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+#new-post-form input,
+#new-post-form textarea,
+#new-post-form select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: $text-light;
+}
+
+#new-post-form textarea {
+  min-height: 80px;
+}
+
+#new-post-form fieldset {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
+#new-post-form .form-section {
+  display: grid;
+  gap: 12px;
+}
+
+#new-post-form .emoji-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 12px;
+  border-radius: 12px;
+}
+
+#new-post-form .emoji-button {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+#new-post-form .emoji-button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+#new-post-form .emoji-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#new-post-form .emoji-input-row input {
+  flex: 1;
+}
+
+#new-post-form button {
+  width: fit-content;
+  margin-top: 12px;
+}
+
+#new-post-form button.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
 .admin-post {
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(20, 20, 28, 0.83);
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 16px;
+}
+
+.admin-post .post-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.admin-post button {
+  background: $highlight;
+  border: none;
+  color: $bg-outer;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.admin-post button.delete-button {
+  background: rgba(255, 40, 80, 0.9);
+}
+
+.admin-post button.edit-button {
+  background: rgba(56, 152, 255, 0.9);
 }
 
 .post-page {
@@ -597,6 +697,26 @@ img.card-image {
   font-family: $font-display;
   font-size: 2.5rem;
   margin-bottom: 20px;
+}
+
+.post-review {
+  margin-bottom: 16px;
+}
+
+.post-date,
+.post-card .post-date {
+  display: block;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 12px;
+}
+
+.post-review .rating,
+.card.review-card .rating {
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  color: #ffce54;
+  margin-bottom: 10px;
 }
 
 .post-body {

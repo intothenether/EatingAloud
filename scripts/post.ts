@@ -10,6 +10,10 @@ interface RestaurantLocation {
   lng: number;
 }
 
+interface Review {
+  rating: number;
+}
+
 interface Post {
   id: string;
   title: string;
@@ -17,6 +21,7 @@ interface Post {
   content: string;
   recipe?: Recipe;
   location?: RestaurantLocation;
+  review?: Review;
 }
 
 const uiTranslations = {
@@ -68,7 +73,7 @@ const staticPosts: { [key: string]: Post } = {
     content: 'A memorable Nordic tasting menu experience at Farang in Stockholm. The chef\'s innovative take on traditional Scandinavian flavors created an unforgettable dining adventure. Each course was a perfect balance of local ingredients and modern techniques.',
     location: {
       name: 'Farang',
-      address: 'RingvÃ¤gen 100, 118 61 Stockholm, Sweden',
+      address: 'Ringvägen 100, 118 61 Stockholm, Sweden',
       lat: 59.338, 
       lng: 18.071
     }
@@ -80,7 +85,7 @@ const staticPosts: { [key: string]: Post } = {
     content: 'Discovered this incredible Basque cheesecake at Ruby Grill. The burnt top and creamy interior make it a standout dessert. The restaurant\'s focus on seasonal ingredients shines through in every bite.',
     location: {
       name: 'Ruby Grill',
-      address: 'VÃ¤stermalmsgallerian, Stockholm, Sweden',
+      address: 'Västermalmsgallerian, Stockholm, Sweden',
       lat: 59.3327,
       lng: 18.0454
     }
@@ -335,10 +340,23 @@ function renderPost(post: Post) {
     `;
   }
 
+  let reviewHtml = '';
+  if (currentPost.review) {
+    reviewHtml = `
+      <div class="post-review">
+        <div class="rating" aria-label="${currentPost.review.rating} out of 5 stars">
+          ${'★'.repeat(currentPost.review.rating)}${'☆'.repeat(5 - currentPost.review.rating)}
+        </div>
+      </div>
+    `;
+  }
+
   container.innerHTML = `
     <article class="full-post">
       ${currentPost.image ? `<img src="${currentPost.image}" alt="${currentPost.title}" class="post-hero-image" />` : ''}
       <h1>${currentPost.title}</h1>
+      ${currentPost.publishDate ? `<p class="post-date">${new Date(currentPost.publishDate).toLocaleDateString()}</p>` : ''}
+      ${reviewHtml}
       <div class="post-body">
         ${currentPost.content.split('\n').map(p => `<p>${p}</p>`).join('')}
       </div>

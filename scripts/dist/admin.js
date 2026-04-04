@@ -1,4 +1,6 @@
 "use strict";
+let currentEditId = null;
+let coverImageDataUrl = null;
 const SESSION_DURATION_MS = 2 * 60 * 60 * 1000; // 2 hours
 const adminForm = document.getElementById('auth-form');
 const loginForm = document.getElementById('login-form');
@@ -75,8 +77,187 @@ function handleLogout() {
     clearSessionToken();
     window.location.reload();
 }
-// Expose deletePost as global
+const newPostForm = document.getElementById('new-post-form');
+const cancelEditButton = document.getElementById('cancel-edit');
+const emojiPickerContainer = document.getElementById('emoji-picker');
+const customEmojiInput = document.getElementById('custom-emoji');
+const addCustomEmojiButton = document.getElementById('add-custom-emoji');
+const coverImageFileInput = document.getElementById('post-image-file');
+const inlineImageFileInput = document.getElementById('post-inline-image-file');
+const defaultEmojis = ['🍜', '🍰', '🍷', '🌶️', '🥂', '🍣', '🍕', '✨'];
+function getStoredEmojis() {
+    const stored = localStorage.getItem('adminEmojiList');
+    if (!stored)
+        return defaultEmojis;
+    try {
+        const list = JSON.parse(stored);
+        return Array.isArray(list) && list.length ? list : defaultEmojis;
+    }
+    catch {
+        return defaultEmojis;
+    }
+}
+function saveStoredEmojis(emojis) {
+    localStorage.setItem('adminEmojiList', JSON.stringify(emojis.slice(0, 50)));
+}
+function insertAtCursor(element, text) {
+    const start = element.selectionStart || 0;
+    const end = element.selectionEnd || 0;
+    const value = element.value;
+    element.value = value.slice(0, start) + text + value.slice(end);
+    element.selectionStart = element.selectionEnd = start + text.length;
+    element.focus();
+}
+function renderEmojiPicker() {
+    const emojis = getStoredEmojis();
+    if (!emojiPickerContainer)
+        return;
+    emojiPickerContainer.innerHTML = '';
+    emojis.forEach(emoji => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'emoji-button';
+        button.textContent = emoji;
+        button.addEventListener('click', () => {
+            const contentField = document.getElementById('post-content');
+            if (contentField) {
+                insertAtCursor(contentField, emoji);
+            }
+        });
+        emojiPickerContainer.appendChild(button);
+    });
+}
+function addCustomEmoji() {
+    if (!customEmojiInput)
+        return;
+    const emoji = customEmojiInput.value.trim();
+    if (!emoji)
+        return;
+    const emojis = getStoredEmojis();
+    if (!emojis.includes(emoji)) {
+        emojis.unshift(emoji);
+        saveStoredEmojis(emojis);
+        renderEmojiPicker();
+    }
+    customEmojiInput.value = '';
+}
+function handleCoverImageFile() {
+    if (!coverImageFileInput || !coverImageFileInput.files?.length)
+        return;
+    const file = coverImageFileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+        const result = reader.result;
+        if (result) {
+            coverImageDataUrl = result;
+            const imageField = document.getElementById('post-image');
+            if (imageField) {
+                imageField.value = result;
+            }
+        }
+    };
+    reader.readAsDataURL(file);
+}
+function handleInlineImageFile() {
+    if (!inlineImageFileInput || !inlineImageFileInput.files?.length)
+        return;
+    const file = inlineImageFileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+        const result = reader.result;
+        if (!result)
+            return;
+        const contentField = document.getElementById('post-content');
+        if (contentField) {
+            insertAtCursor(contentField, `\n<img src="${result}" alt="Inline image" />\n`);
+        }
+        inlineImageFileInput.value = '';
+    };
+    reader.readAsDataURL(file);
+}
+// Expose admin helpers as globals
 window.deletePost = deletePost;
+window.editPost = editPost;
+function resetPostForm() {
+    currentEditId = null;
+    coverImageDataUrl = null;
+    const idField = document.getElementById('post-id');
+    const cancelButton = document.getElementById('cancel-edit');
+    const submitButton = document.querySelector('#new-post-form button[type="submit"]');
+    const coverFileInput = document.getElementById('post-image-file');
+    const inlineImageInput = document.getElementById('post-inline-image-file');
+    const publishDateField = document.getElementById('post-publish-date');
+    if (idField)
+        idField.value = '';
+    if (cancelButton)
+        cancelButton.classList.add('hidden');
+    if (submitButton)
+        submitButton.textContent = 'Add Post';
+    if (coverFileInput)
+        coverFileInput.value = '';
+    if (inlineImageInput)
+        inlineImageInput.value = '';
+    newPostForm?.reset();
+    if (publishDateField) {
+        publishDateField.value = new Date().toISOString().slice(0, 10);
+    }
+}
+function populatePostForm(post) {
+    currentEditId = post.id;
+    coverImageDataUrl = null;
+    const idField = document.getElementById('post-id');
+    const titleField = document.getElementById('post-title');
+    const imageField = document.getElementById('post-image');
+    const contentField = document.getElementById('post-content');
+    const ingredientField = document.getElementById('post-recipe-ingredients');
+    const stepsField = document.getElementById('post-recipe-steps');
+    const locationNameField = document.getElementById('post-location-name');
+    const locationAddressField = document.getElementById('post-location-address');
+    const locationLatField = document.getElementById('post-location-lat');
+    const locationLngField = document.getElementById('post-location-lng');
+    const reviewCheckbox = document.getElementById('post-review-checkbox');
+    const reviewRating = document.getElementById('post-review-rating');
+    const cancelButton = document.getElementById('cancel-edit');
+    const submitButton = document.querySelector('#new-post-form button[type="submit"]');
+    if (idField)
+        idField.value = post.id;
+    if (titleField)
+        titleField.value = post.title;
+    if (imageField)
+        imageField.value = post.image || '';
+    if (contentField)
+        contentField.value = post.content;
+    if (ingredientField)
+        ingredientField.value = post.recipe ? post.recipe.ingredients.join('\n') : '';
+    if (stepsField)
+        stepsField.value = post.recipe ? post.recipe.steps.join('\n') : '';
+    if (locationNameField)
+        locationNameField.value = post.location?.name || '';
+    if (locationAddressField)
+        locationAddressField.value = post.location?.address || '';
+    if (locationLatField)
+        locationLatField.value = post.location ? String(post.location.lat) : '';
+    if (locationLngField)
+        locationLngField.value = post.location ? String(post.location.lng) : '';
+    const publishDateField = document.getElementById('post-publish-date');
+    if (publishDateField)
+        publishDateField.value = post.publishDate || new Date().toISOString().slice(0, 10);
+    if (reviewCheckbox)
+        reviewCheckbox.checked = !!post.review;
+    if (reviewRating)
+        reviewRating.value = post.review ? String(post.review.rating) : '5';
+    if (cancelButton)
+        cancelButton.classList.remove('hidden');
+    if (submitButton)
+        submitButton.textContent = 'Update Post';
+}
+function editPost(id) {
+    const posts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+    const post = posts.find(p => p.id === id);
+    if (!post)
+        return;
+    populatePostForm(post);
+}
 async function checkMasterPassword(password) {
     const { hash, salt } = getStoredCredentials();
     if (!hash || !salt)
@@ -98,18 +279,32 @@ function loadAdminPosts() {
     posts.forEach(post => {
         const div = document.createElement('div');
         div.className = 'admin-post';
+        const reviewStars = post.review ? '★'.repeat(post.review.rating) + '☆'.repeat(5 - post.review.rating) : '';
         div.innerHTML = `
       <h3>${post.title}</h3>
+      ${post.publishDate ? `<p><strong>Publish date:</strong> ${post.publishDate}</p>` : ''}
+      ${post.review ? `<p><strong>Review:</strong> <span aria-label="${post.review.rating} out of 5 stars">${reviewStars}</span></p>` : ''}
       ${post.image ? `<img src="${post.image}" alt="${post.title}" style="max-width: 200px;">` : ''}
       <p>${post.content}</p>
-      <button onclick="deletePost('${post.id}')">Delete</button>
+      ${post.recipe ? `<p><strong>Recipe:</strong> ${post.recipe.ingredients.length} ingredients, ${post.recipe.steps.length} steps</p>` : ''}
+      ${post.location ? `<p><strong>Location:</strong> ${post.location.name || 'Map'} (${post.location.lat.toFixed(4)}, ${post.location.lng.toFixed(4)})</p>` : ''}
+      <div class="post-actions">
+        <button type="button" class="edit-button" onclick="editPost('${post.id}')">Edit</button>
+        <button type="button" class="delete-button" onclick="deletePost('${post.id}')">Delete</button>
+      </div>
     `;
         container.appendChild(div);
     });
 }
 function savePost(post) {
     const posts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
-    posts.unshift(post); // Add to beginning
+    const existingIndex = posts.findIndex(p => p.id === post.id);
+    if (existingIndex >= 0) {
+        posts[existingIndex] = post;
+    }
+    else {
+        posts.unshift(post);
+    }
     localStorage.setItem('blogPosts', JSON.stringify(posts));
 }
 function deletePost(id) {
@@ -153,21 +348,61 @@ logoutButton.style.margin = '10px 0 20px';
 logoutButton.addEventListener('click', handleLogout);
 if (cmsContent)
     cmsContent.prepend(logoutButton);
-const newPostForm = document.getElementById('new-post-form');
+if (cancelEditButton) {
+    cancelEditButton.addEventListener('click', resetPostForm);
+}
+if (addCustomEmojiButton) {
+    addCustomEmojiButton.addEventListener('click', addCustomEmoji);
+}
+if (coverImageFileInput) {
+    coverImageFileInput.addEventListener('change', handleCoverImageFile);
+}
+if (inlineImageFileInput) {
+    inlineImageFileInput.addEventListener('change', handleInlineImageFile);
+}
 if (newPostForm) {
+    resetPostForm();
+    renderEmojiPicker();
     newPostForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const title = document.getElementById('post-title').value.trim();
-        const image = document.getElementById('post-image').value.trim();
+        const imageUrl = document.getElementById('post-image').value.trim();
         const content = document.getElementById('post-content').value.trim();
+        const recipeIngredients = document.getElementById('post-recipe-ingredients').value.trim();
+        const recipeSteps = document.getElementById('post-recipe-steps').value.trim();
+        const locationName = document.getElementById('post-location-name').value.trim();
+        const locationAddress = document.getElementById('post-location-address').value.trim();
+        const locationLat = parseFloat(document.getElementById('post-location-lat').value.trim());
+        const locationLng = parseFloat(document.getElementById('post-location-lng').value.trim());
+        const publishDate = document.getElementById('post-publish-date').value.trim();
+        const reviewEnabled = document.getElementById('post-review-checkbox').checked;
+        const reviewRating = parseInt(document.getElementById('post-review-rating').value, 10);
         if (!title || !content) {
             alert('Please provide title and content.');
             return;
         }
-        const post = { id: Date.now().toString(), title, image: image || undefined, content };
+        const recipe = recipeIngredients || recipeSteps ? {
+            ingredients: recipeIngredients ? recipeIngredients.split('\n').map(item => item.trim()).filter(Boolean) : [],
+            steps: recipeSteps ? recipeSteps.split('\n').map(item => item.trim()).filter(Boolean) : []
+        } : undefined;
+        const location = !Number.isNaN(locationLat) && !Number.isNaN(locationLng)
+            ? { name: locationName, address: locationAddress, lat: locationLat, lng: locationLng }
+            : undefined;
+        const review = reviewEnabled ? { rating: Math.max(1, Math.min(5, reviewRating)) } : undefined;
+        const postId = currentEditId || Date.now().toString();
+        const post = {
+            id: postId,
+            title,
+            image: coverImageDataUrl || imageUrl || undefined,
+            content,
+            recipe,
+            location,
+            review,
+            publishDate: publishDate || new Date().toISOString().slice(0, 10)
+        };
         savePost(post);
         loadAdminPosts();
-        newPostForm.reset();
+        resetPostForm();
     });
 }
 requireLogin();

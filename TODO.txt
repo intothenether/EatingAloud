@@ -15,6 +15,18 @@
 --8. Add the site's name next to the logo in the header in a nice looking manner.
 
 
+
+
+--Make the posting on the cms more functional. The subpages support maps and recipes but the cms does not have a way of adding them to posts yet. Also add the possibility to edit already existing posts as well as removing them. 
+
+
+--Add custom emoji functionality and a emoji picker to the cms posting. Add a way to upload the images for posts locally from the drive instead of url. Also make it possible to add images in text not only the cover image. Also add the possibility to mark set the post as a review and attach stars to it, which is already supported on the page, but not the cms yet.
+
+--Add publish date to the posts.
+
+
+
+
 X. Make account's at different social media platforms.
 
 X2. Buy a domain.

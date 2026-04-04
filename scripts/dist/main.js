@@ -280,6 +280,9 @@ function loadPosts() {
     posts.forEach(post => {
         const article = document.createElement('article');
         article.className = 'post-card dynamic-post';
+        if (post.review) {
+            article.classList.add('review-card');
+        }
         article.dataset.postId = post.id;
         if (post.image) {
             const img = document.createElement('img');
@@ -288,9 +291,23 @@ function loadPosts() {
             img.alt = post.title;
             article.appendChild(img);
         }
+        if (post.review) {
+            const rating = document.createElement('div');
+            rating.className = 'rating';
+            rating.textContent = '★'.repeat(post.review.rating) + '☆'.repeat(5 - post.review.rating);
+            rating.setAttribute('aria-label', `${post.review.rating} out of 5 stars`);
+            article.appendChild(rating);
+        }
         const h3 = document.createElement('h3');
         h3.textContent = post.title;
         article.appendChild(h3);
+        if (post.publishDate) {
+            const meta = document.createElement('time');
+            meta.className = 'post-date';
+            meta.dateTime = post.publishDate;
+            meta.textContent = new Date(post.publishDate).toLocaleDateString();
+            article.appendChild(meta);
+        }
         const p = document.createElement('p');
         p.textContent = post.content;
         article.appendChild(p);
